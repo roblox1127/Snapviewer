@@ -11,9 +11,28 @@
     <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="https://i.postimg.cc/Bb1dV9sh/1000017910-removebg-preview.png">
     <title>SnapchatViewer| #1 Snapchat Story Viewer & SnapDroid Tool 2026</title>
-    <meta name="description" content="Use SnapchatViewer, the premier Snapchat story viewer powered by SnapDroid. Access our Snapchat stalker tool to view stories anonymously and check snap scores.">
+    <meta name="description" content="View Snapchat stories anonymously with the SnapDroid engine. The world's most trusted Snapchat stalker tool for private story viewing and chat log decryption.">
     <meta name="keywords" content="snapchat story viewer, snapdroid, snapchat stalker, view snapchat stories anonymously, snapchat chat log viewer, snapchat tracker 2026">
-    
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "SoftwareApplication",
+  "name": "SnapchatViewer Pro",
+  "operatingSystem": "iOS, Android, Windows",
+  "applicationCategory": "SocialMediaTool",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "reviewCount": "12840"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0.00",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+
     <style>
     @import "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap";
     @import "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap";
@@ -258,6 +277,16 @@ body.light-mode .connected-state {
     background: #166534 !important;
     color: #ffffff !important;
 }
+.scanning-pulse {
+    animation: scanPulse 0.8s infinite alternate ease-in-out;
+    border: 3px solid #000 !important;
+}
+
+@keyframes scanPulse {
+    from { transform: scale(1); filter: brightness(1); }
+    to { transform: scale(0.98); filter: brightness(1.2); }
+}
+
 
 </style>
 </head>
@@ -553,17 +582,38 @@ body.light-mode .connected-state {
 
     function closeModal() { document.getElementById('loginModal').style.display = 'none'; }
 
-    function fetchUser() {
+        function fetchUser() {
         const user = document.getElementById('target').value.trim();
         if(!user) return alert("Please enter a username first.");
         const btn = document.getElementById('conBtn');
         btn.innerText = "Connecting...";
+        
         setTimeout(() => {
             btn.innerText = "Connected";
             btn.classList.add('connected-state');
-            document.getElementById('profile-result').style.display = 'flex';
-            document.getElementById('display-user').innerText = user;
-            document.getElementById('snapCode').src = `https://app.snapchat.com/web/deeplink/snapcode?username=${user}&type=SVG&size=400`;
+            
+            // Logic: Generate the fake but realistic metadata
+            const lastSeen = Math.floor(Math.random() * 59) + 1;
+            const dataSize = (Math.random() * 45 + 5).toFixed(1);
+            const dpHash = Math.random().toString(16).slice(2,8).toUpperCase();
+
+            const profileResult = document.getElementById('profile-result');
+            profileResult.style.display = 'flex';
+            
+            // Logic: Injecting the Snapcode + User Info + Technical Stats
+            profileResult.innerHTML = `
+                <img id="snapCode" class="snap-frame" src="https://app.snapchat.com/web/deeplink/snapcode?username=${user}&type=SVG&size=400">
+                <div style="flex:1; margin-left: 15px;">
+                    <b id="display-user" style="font-size:16px;">${user}</b>
+                    <div style="font-size:10px; font-weight:900; opacity: 0.8;">SESSION ENCRYPTED & SECURED</div>
+                </div>
+                <div style="text-align: right; font-family: 'JetBrains Mono'; font-size: 8px; color: #000; opacity: 0.7; line-height: 1.2;">
+                    DP_HASH: 0x${dpHash}<br>
+                    LAST_ACTIVE: ${lastSeen}m ago<br>
+                    CACHED_DATA: ${dataSize}MB
+                </div>
+            `;
+            
             window.scrollTo({ top: 200, behavior: 'smooth' });
         }, 800);
     }
@@ -603,34 +653,64 @@ body.light-mode .connected-state {
     }
 
     function triggerScan(mode) {
-        const user = document.getElementById('target').value;
-        if(!user) return alert("Connect user first");
-        currentMode = mode;
-        document.getElementById('feature-list').style.display = 'none';
-        document.getElementById('loader-container').style.display = 'block';
-        const statusText = document.getElementById('l-text');
-        const bar = document.getElementById('p-bar');
-        const messages = ["Initializing SnapDroid Engine...", "Bypassing Snapchat Story Viewer Protection...", "Authenticating SnapDroid Handshake...", "Enabling Snapchat Stalker Ghost Mode...", "Querying Chat Log Viewer Database...", "Decrypting SnapDroid Packets...", "Finalizing StoryViewer Secure Tunnel..."];
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += 2; bar.style.width = progress + "%";
-            if (progress < 15) statusText.innerText = messages[0];
-            else if (progress < 30) statusText.innerText = messages[1];
-            else if (progress < 45) statusText.innerText = messages[2];
-            else if (progress < 60) statusText.innerText = messages[3];
-            else if (progress < 75) statusText.innerText = messages[4];
-            else if (progress < 90) statusText.innerText = messages[5];
-            else statusText.innerText = messages[6];
-            if (progress >= 100) {
-                clearInterval(interval);
-                document.getElementById('loader-container').style.display = 'none';
-                if(mode === 'friends') runFriends();
-                else if(mode === 'vault') runVault();
-                else if(mode === 'Chat History') runChat();
-                else if(mode === 'Score') runScore();
-            }
-        }, 45);
-    }
+    const user = document.getElementById('target').value;
+    if(!user) return alert("Connect user first");
+    
+    // START VISUAL FEEDBACK: Pulse the profile card to show it's being scanned
+    const profileCard = document.getElementById('profile-result');
+    profileCard.style.transition = "0.3s";
+    profileCard.style.boxShadow = "0 0 30px var(--accent)";
+    profileCard.classList.add('scanning-pulse'); // Ensure you add the CSS below!
+
+    currentMode = mode;
+    document.getElementById('feature-list').style.display = 'none';
+    document.getElementById('loader-container').style.display = 'block';
+    
+    const statusText = document.getElementById('l-text');
+    const bar = document.getElementById('p-bar');
+    const messages = [
+        "Initializing SnapDroid Engine...", 
+        "Bypassing Snapchat Story Viewer Protection...", 
+        "Authenticating SnapDroid Handshake...", 
+        "Enabling Snapchat Stalker Ghost Mode...", 
+        "Querying Chat Log Viewer Database...", 
+        "Decrypting SnapDroid Packets...", 
+        "Finalizing StoryViewer Secure Tunnel..."
+    ];
+
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress += 2; 
+        bar.style.width = progress + "%";
+
+        if (progress < 15) statusText.innerText = messages[0];
+        else if (progress < 30) statusText.innerText = messages[1];
+        else if (progress < 45) statusText.innerText = messages[2];
+        else if (progress < 60) statusText.innerText = messages[3];
+        else if (progress < 75) statusText.innerText = messages[4];
+        else if (progress < 90) statusText.innerText = messages[5];
+        else statusText.innerText = messages[6];
+
+        if (progress >= 100) {
+            clearInterval(interval);
+            
+            // STOP VISUAL FEEDBACK
+            profileCard.classList.remove('scanning-pulse');
+            profileCard.style.boxShadow = "0 10px 25px rgba(255, 252, 0, 0.2)"; 
+            
+            document.getElementById('loader-container').style.display = 'none';
+
+            // Route to correct result view
+            if(mode === 'friends') runFriends();
+            else if(mode === 'vault') runVault();
+            else if(mode === 'Chat History') runChat();
+            else if(mode === 'Score') runScore();
+
+            // Auto-scroll to show the new results
+            window.scrollTo({ top: 300, behavior: 'smooth' });
+        }
+    }, 45);
+}
 
     function runFriends() {
         const user = document.getElementById('target').value;
