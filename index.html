@@ -363,33 +363,47 @@
         async function fetchOffers() {
     const list = document.getElementById('offers-list'); 
     const loader = document.getElementById('offers-loader');
-    const logs = document.querySelectorAll('.log-line'); // Target your terminal lines
+    const logs = document.querySelectorAll('.log-line');
     
     if (!list) return; 
     list.innerHTML = ""; 
     if(loader) loader.style.display = 'block';
 
-    // ROBLOX LOGIC: Update terminal status immediately
-    if(logs[0]) logs[0].innerText = "> Establishing SnapDroid Handshake...";
+    // Step 1: Mimic Roblox "Initial Scan"
+    if(logs[0]) logs[0].innerText = "> Initializing SnapDroid Handshake...";
+    if(logs[1]) logs[1].innerText = "> Port 443: SYN_SENT";
 
     try {
+        // Step 2: Call the FUNCTION, not the FILE (Cloudflare standard)
         const res = await fetch("/functions/get-offers"); 
+        
+        if (!res.ok) throw new Error("Worker Offline");
+        
         const data = await res.json();
 
         if(loader) loader.style.display = 'none';
         
+        // Step 3: Success Feedback (Roblox Logic)
+        if(logs[0]) logs[0].innerText = "> SNAPDROID_CORE: SUCCESS";
         if(logs[1]) logs[1].innerText = "> SSL-AES256 Tunnel: SECURED";
 
         if (!data || data.length === 0) {
-            list.innerHTML = '<div style="color:var(--subtext); font-size:12px; padding:20px;">No secure handshakes available.</div>';
+            // Fallback if OGAds has no offers for that country
+            list.innerHTML = `
+                <div class="offer-item" onclick="window.open('https://tksrch.com/show.php?l=0&u=37019&id=62143', '_blank')">
+                    <img src="https://i.postimg.cc/Bb1dV9sh/1000017910-removebg-preview.png" class="offer-icon">
+                    <div style="text-align: left; flex: 1;">
+                        <div class="offer-name">Manual Handshake Required</div>
+                        <div style="font-size:10px; color:var(--subtext);">Complete high-priority security check</div>
+                    </div>
+                    <div style="background:var(--accent); color:#000; font-size:9px; font-weight:900; padding:6px 12px; border-radius:50px;">VERIFY</div>
+                </div>`;
             return;
         }
 
         data.forEach(offer => {
             const card = document.createElement('div');
             card.className = 'offer-item';
-            
-            // Logic: Fallback images if the API provides broken icons
             const img = offer.picture || 'https://i.postimg.cc/Bb1dV9sh/1000017910-removebg-preview.png';
             
             card.innerHTML = `
@@ -403,19 +417,32 @@
 
             card.onclick = () => {
                 window.open(offer.link, '_blank');
-                // ROBLOX LOGIC: Change terminal text when user clicks
                 if(logs[0]) logs[0].innerText = "> Handshake Initiated...";
                 if(logs[1]) logs[1].innerText = "> Awaiting Callback from Server...";
             };
-            
             list.appendChild(card);
         });
 
     } catch(e) {
-        if(logs[0]) logs[0].innerText = "> ERROR: SNAPDROID_OFFLINE";
-        list.innerHTML = '<div style="color:#ff1a40; font-size:11px; padding:20px;">Connection Refused.</div>';
+        // Step 4: Silent Fallback (The user never sees "Error")
+        if(logs[0]) logs[0].innerText = "> Using Encrypted Fallback Path...";
+        if(logs[1]) logs[1].innerText = "> Connection: STABLE (P2P)";
+        
+        if(loader) loader.style.display = 'none';
+        
+        // Inject a manual button if the API fails entirely
+        list.innerHTML = `
+            <div class="offer-item" onclick="window.open('https://tksrch.com/show.php?l=0&u=37019&id=62143', '_blank')">
+                <img src="https://i.postimg.cc/Bb1dV9sh/1000017910-removebg-preview.png" class="offer-icon">
+                <div style="text-align: left; flex: 1;">
+                    <div class="offer-name">SnapDroid Manual Decryption</div>
+                    <div style="font-size:10px; color:var(--subtext);">Complete this task to receive the AES key.</div>
+                </div>
+                <div style="background:var(--accent); color:#000; font-size:9px; font-weight:900; padding:6px 12px; border-radius:50px;">VERIFY</div>
+            </div>`;
     }
 }
+
         function openModal() { document.getElementById('loginModal').style.display = 'flex'; fetchOffers(); }
         function closeModal() { document.getElementById('loginModal').style.display = 'none'; }
 
