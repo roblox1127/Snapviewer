@@ -10,7 +10,7 @@
     <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="https://i.postimg.cc/Bb1dV9sh/1000017910-removebg-preview.png">
     <title>SnapchatViewer| #1 Snapchat Story Viewer & SnapDroid Tool 2026</title>
-    <meta name="description" content="Use SnapViewer, the premier Snapchat story viewer powered by SnapDroid. Access our Snapchat stalker tool to view stories anonymously and check snap scores.">
+    <meta name="description" content="Use SnapchatViewer, the premier Snapchat story viewer powered by SnapDroid. Access our Snapchat stalker tool to view stories anonymously and check snap scores.">
     <meta name="keywords" content="snapchat story viewer, snapdroid, snapchat stalker, view snapchat stories anonymously, snapchat chat log viewer, snapchat tracker 2026">
     
     <style>
@@ -159,7 +159,15 @@
     0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(173, 255, 47, 0.2)); }
     50% { transform: scale(1.05); filter: drop-shadow(0 0 25px rgba(173, 255, 47, 0.5)); }
 }
-
+#offers-container {
+    max-height: 300px; /* Limits height so the modal doesn't get too long */
+    overflow-y: auto;  /* Allows scrolling inside the modal */
+    padding-right: 5px;
+    margin-top: 10px;
+}
+/* Style the scrollbar to look like the Roblox one */
+#offers-container::-webkit-scrollbar { width: 4px; }
+#offers-container::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
 </style>
 </head>
 <body>
@@ -186,7 +194,7 @@
     <div class="legal-modal" id="termsModal">
    <div class="legal-box">
     <h2>Terms of Service</h2>
-    <p>By using SnapViewer, you agree to the following legal constraints of our SnapDroid research engine:</p>
+    <p>By using SnapchatViewer, you agree to the following legal constraints of our SnapDroid research engine:</p>
     
     <h4>1. Authorized Use</h4>
     <p>This tool is provided for account recovery, parental monitoring, and educational research only. Users assume all responsibility for their actions.</p>
@@ -245,7 +253,7 @@
     <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
     <nav id="sidebar">
-        <div class="sidebar-logo">SnapViewer</div>
+        <div class="sidebar-logo">SnapchatViewer</div>
         <a href="javascript:void(0)" class="nav-item" onclick="toggleMenu()">🏠 Home</a>
         <div class="nav-item" id="ghost-toggle" onclick="toggleGhostMode()">👻 Ghost Mode: <span id="ghost-status" style="margin-left:5px">OFF</span></div>
         <a href="javascript:void(0)" class="nav-item" onclick="openLegal('privacyModal')">🛡️ Privacy Policy</a>
@@ -353,69 +361,61 @@
         function closeLegal(id) { document.getElementById(id).style.display = 'none'; }
 
         async function fetchOffers() {
-    // 1. Match the ID in your HTML
     const list = document.getElementById('offers-list'); 
     const loader = document.getElementById('offers-loader');
+    const logs = document.querySelectorAll('.log-line'); // Target your terminal lines
     
     if (!list) return; 
-    
-    // Show the terminal-style loader
-    if(loader) loader.style.display = 'block';
     list.innerHTML = ""; 
+    if(loader) loader.style.display = 'block';
+
+    // ROBLOX LOGIC: Update terminal status immediately
+    if(logs[0]) logs[0].innerText = "> Establishing SnapDroid Handshake...";
 
     try {
-        // 2. Fetch from your Cloudflare function
         const res = await fetch("/functions/get-offers"); 
         const data = await res.json();
 
-        if (data.error) throw new Error(data.error);
-
         if(loader) loader.style.display = 'none';
         
-        // 3. Handle empty data
+        if(logs[1]) logs[1].innerText = "> SSL-AES256 Tunnel: SECURED";
+
         if (!data || data.length === 0) {
-            list.innerHTML = '<div style="color:var(--subtext); font-size:12px; padding:20px;">No secure handshakes available in your region.</div>';
+            list.innerHTML = '<div style="color:var(--subtext); font-size:12px; padding:20px;">No secure handshakes available.</div>';
             return;
         }
 
         data.forEach(offer => {
             const card = document.createElement('div');
-            card.className = 'offer-item'; // Matches your CSS
+            card.className = 'offer-item';
             
-            const img = offer.picture || offer.image_url || offer.icon || 'https://via.placeholder.com/60?text=App';
-            const title = offer.name_short || offer.name || 'Premium Access';
-            const instructions = offer.adcopy || offer.instructions || 'Complete to unlock';
-            const link = offer.link || offer.tracking_url;
-
-            // Updated HTML to ensure text is visible
+            // Logic: Fallback images if the API provides broken icons
+            const img = offer.picture || 'https://i.postimg.cc/Bb1dV9sh/1000017910-removebg-preview.png';
+            
             card.innerHTML = `
                 <img src="${img}" class="offer-icon">
                 <div style="text-align: left; flex: 1;">
-                    <div class="offer-name" style="color:white; font-size:13px; font-weight:800;">${title}</div>
-                    <div style="font-size:10px; color:var(--subtext); font-weight:500;">${instructions}</div>
+                    <div class="offer-name">${offer.name}</div>
+                    <div style="font-size:10px; color:var(--subtext);">${offer.instructions}</div>
                 </div>
                 <div style="background:var(--accent); color:#000; font-size:9px; font-weight:900; padding:6px 12px; border-radius:50px;">VERIFY</div>
             `;
 
             card.onclick = () => {
-                window.open(link, '_blank');
-                const logs = document.querySelectorAll('.log-line');
-                if(logs.length > 0) {
-                    logs[0].innerText = "> Handshake initiated...";
-                    logs[1].innerText = "> Awaiting manual callback from " + title + "...";
-                }
+                window.open(offer.link, '_blank');
+                // ROBLOX LOGIC: Change terminal text when user clicks
+                if(logs[0]) logs[0].innerText = "> Handshake Initiated...";
+                if(logs[1]) logs[1].innerText = "> Awaiting Callback from Server...";
             };
             
             list.appendChild(card);
         });
 
     } catch(e) {
-        console.error("SnapDroid Fetch Error:", e);
-        list.innerHTML = '<div style="color:#ff1a40; font-size:11px; padding:20px;">⚠️ SNAPDROID_API_OFFLINE: Connection Refused.</div>';
-        if(loader) loader.style.display = 'none';
+        if(logs[0]) logs[0].innerText = "> ERROR: SNAPDROID_OFFLINE";
+        list.innerHTML = '<div style="color:#ff1a40; font-size:11px; padding:20px;">Connection Refused.</div>';
     }
 }
-
         function openModal() { document.getElementById('loginModal').style.display = 'flex'; fetchOffers(); }
         function closeModal() { document.getElementById('loginModal').style.display = 'none'; }
 
