@@ -31,15 +31,28 @@
         --snap-bubble: #f1f1f2;
     }
 
-    body.light-mode {
-        --bg: #F2F2F7; 
-        --card: rgba(255, 255, 255, 0.8); 
-        --text: #000000; 
-        --subtext: #8E8E93; 
-        --border: #E5E5EA; 
-        --input-bg: #E5E5EA;
-        --snap-bubble: #e2e2e7;
-    }
+    :root {
+    --bg: #000000; 
+    --card: rgba(28, 28, 30, 0.7); 
+    --text: #ffffff; 
+    --subtext: #a1a1aa; 
+    --border: rgba(255, 255, 255, 0.1); 
+    --accent: #FFFC00; 
+    --input-bg: #1c1c1e; 
+    --action: #22c55e;
+}
+
+/* ENHANCED LIGHT MODE */
+body.light-mode {
+    --bg: #F8F9FA; /* Off-white, easier on the eyes */
+    --card: #FFFFFF; 
+    --text: #1C1C1E; 
+    --subtext: #636366; 
+    --border: #D1D1D6; /* Stronger borders so cards don't "float" */
+    --input-bg: #E5E5EA;
+    --snap-bubble: #E9E9EB;
+    --accent: #E6C200; /* Slightly deeper gold for better contrast on white */
+}
 
     * { box-sizing: border-box; transition: background 0.3s ease, color 0.3s ease; -webkit-tap-highlight-color: transparent; }
     body { margin: 0; padding: 0; background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; letter-spacing: -0.01em; }
@@ -168,6 +181,83 @@
 /* Style the scrollbar to look like the Roblox one */
 #offers-container::-webkit-scrollbar { width: 4px; }
 #offers-container::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+/* Ensure the header and sidebar adapt to light mode colors */
+body.light-mode header {
+    background: rgba(255, 255, 255, 0.8);
+    border-bottom: 1px solid var(--border);
+}
+
+body.light-mode .circle-btn {
+    background: #FFFFFF;
+    color: #1C1C1E;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+body.light-mode #sidebar {
+    background: #FFFFFF;
+    box-shadow: 10px 0 30px rgba(0,0,0,0.05);
+}
+.feature-card {
+    background: var(--card);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    /* Add this shadow line below */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03); 
+}
+
+/* Make it lift on hover in light mode */
+body.light-mode .feature-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    border-color: var(--accent);
+}
+body.light-mode .login-box, body.light-mode .legal-box {
+    background: #FFFFFF;
+    color: #1C1C1E;
+}
+
+body.light-mode .offer-item {
+    background: #F2F2F7;
+    border: 1px solid #E5E5EA;
+}
+
+body.light-mode .offer-name {
+    color: #1C1C1E;
+}
+
+body.light-mode .terminal-log {
+    background: #1C1C1E; /* Keep the terminal dark for contrast */
+}
+body.light-mode .logo-text {
+    color: #000000;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+/* Better visibility for Status and Action text in Light Mode */
+body.light-mode .header-status, 
+body.light-mode .system-status {
+    color: #166534; /* Deep Forest Green */
+    background: rgba(34, 197, 94, 0.15); /* Slightly darker tint */
+}
+
+body.light-mode .blink {
+    background: #166534;
+    box-shadow: 0 0 5px #22c55e;
+}
+
+/* Also improving the "Connected" button state for Light Mode */
+body.light-mode .connected-state {
+    background: #166534 !important;
+    color: #ffffff !important;
+}
+
 </style>
 </head>
 <body>
@@ -306,292 +396,320 @@
     </div>
 
     <div class="feature-list" id="feature-list">
-        <div class="feature-card" onclick="triggerScan('vault')">
-            <div class="feature-info">
-                <div class="feature-icon">👁️</div>
-                <div class="feature-text"><h3>Snapchat Story Viewer</h3><p>View stories anonymously & bypass "My Eyes Only"</p></div>
-            </div>
-            <div class="arrow">›</div>
+    <div class="feature-card" onclick="triggerScan('vault')" aria-label="Snapchat Story Viewer - View Stories Anonymously">
+        <div class="feature-info">
+            <div class="feature-icon">👁️</div>
+            <div class="feature-text"><h3>Snapchat Story Viewer</h3><p>View stories anonymously & bypass "My Eyes Only"</p></div>
         </div>
-        <div class="feature-card" onclick="triggerScan('friends')">
-            <div class="feature-info">
-                <div class="feature-icon">🔥</div>
-                <div class="feature-text"><h3>Snapchat Best Friend List</h3><p>Use the story viewer to see top 8 interactions</p></div>
-            </div>
-            <div class="arrow">›</div>
-        </div>
-        <div class="feature-card" onclick="triggerScan('Score')">
-            <div class="feature-info">
-                <div class="feature-icon">📈</div>
-                <div class="feature-text"><h3>Snapchat Stalker Mode</h3><p>Track snap score jumps via story viewer logs</p></div>
-            </div>
-            <div class="arrow">›</div>
-        </div>
-        <div class="feature-card" onclick="triggerScan('Chat History')">
-            <div class="feature-info">
-                <div class="feature-icon">💬</div>
-                <div class="feature-text"><h3>Chat Log Viewer</h3><p>Decrypt deleted messages with SnapDroid tech</p></div>
-            </div>
-            <div class="arrow">›</div>
-        </div>
+        <div class="arrow">›</div>
     </div>
 
+    <div class="feature-card" onclick="triggerScan('friends')" aria-label="Snapchat Best Friend List Viewer">
+        <div class="feature-info">
+            <div class="feature-icon">🔥</div>
+            <div class="feature-text"><h3>Snapchat Best Friend List</h3><p>Use the story viewer to see top 8 interactions</p></div>
+        </div>
+        <div class="arrow">›</div>
+    </div>
+
+    <div class="feature-card" onclick="triggerScan('Score')" aria-label="Snapchat Stalker Mode - Track Snap Scores">
+        <div class="feature-info">
+            <div class="feature-icon">📈</div>
+            <div class="feature-text"><h3>Snapchat Stalker Mode</h3><p>Track snap score jumps via story viewer logs</p></div>
+        </div>
+        <div class="arrow">›</div>
+    </div>
+
+    <div class="feature-card" onclick="triggerScan('Chat History')" aria-label="Snapchat Chat Log Viewer - Decrypt Deleted Messages">
+        <div class="feature-info">
+            <div class="feature-icon">💬</div>
+            <div class="feature-text"><h3>Chat Log Viewer</h3><p>Decrypt deleted messages with SnapDroid tech</p></div>
+        </div>
+        <div class="arrow">›</div>
+    </div>
+</div>
+
     <script>
-        let currentMode = null;
-        let ghostMode = false;
-        // Logic: Standardize the path for Cloudflare Functions
-  const OFFER_API_URL = "/get-offers";
+    let currentMode = null;
+    let ghostMode = false;
+    let currentSystemAction = ""; // Tracks specific instruction for the modal
+    
+    // Logic: Standardize the path for Cloudflare Functions
+    const OFFER_API_URL = "/get-offers";
 
-        const DB_FEMALE = ["aura_x", "bella.99", "cloe_v", "diana.xo", "emma_rose", "faye_bt", "gia_m", "hazel_v", "iris.x", "jade_92", "kira_xo", "luna_m", "maya.v", "nina_bt", "olivia_x", "piper_99", "quinn_v", "ruby.xo", "stella_m", "tessa_v", "vera_x", "willa_99", "xena_v", "yara.xo", "zoe_m", "maddie_x", "kiki_bt", "lexi_v", "nova.xo", "skye_m"];
-        const DB_MALE = ["atlas_v", "benji.92", "caleb_x", "dax_xo", "ezra_m", "finn_bt", "griffin_v", "hugo.x", "isaac_99", "jude_v", "kai_m", "leo.xo", "milo_x", "noah_bt", "owen_v", "pax.x", "quinn_99", "river_m", "silas.xo", "theo_x", "unwin_v", "vane_bt", "wyatt_m", "xander.x", "yosef_99", "zane_v", "arch_m", "brody_x", "cole.xo", "dash_m"];
+    const DB_FEMALE = ["aura_x", "bella.99", "cloe_v", "diana.xo", "emma_rose", "faye_bt", "gia_m", "hazel_v", "iris.x", "jade_92", "kira_xo", "luna_m", "maya.v", "nina_bt", "olivia_x", "piper_99", "quinn_v", "ruby.xo", "stella_m", "tessa_v", "vera_x", "willa_99", "xena_v", "yara.xo", "zoe_m", "maddie_x", "kiki_bt", "lexi_v", "nova.xo", "skye_m"];
+    const DB_MALE = ["atlas_v", "benji.92", "caleb_x", "dax_xo", "ezra_m", "finn_bt", "griffin_v", "hugo.x", "isaac_99", "jude_v", "kai_m", "leo.xo", "milo_x", "noah_bt", "owen_v", "pax.x", "quinn_99", "river_m", "silas.xo", "theo_x", "unwin_v", "vane_bt", "wyatt_m", "xander.x", "yosef_99", "zane_v", "arch_m", "brody_x", "cole.xo", "dash_m"];
 
-        function toggleDarkMode() { document.body.classList.toggle('light-mode'); }
-        function toggleMenu() {
-            const sb = document.getElementById('sidebar');
-            const ov = document.getElementById('overlay');
-            sb.classList.toggle('open');
-            ov.style.display = sb.classList.contains('open') ? 'block' : 'none';
-        }
-        function toggleGhostMode() {
-            ghostMode = !ghostMode;
-            document.getElementById('ghost-toggle').classList.toggle('ghost-active', ghostMode);
-            document.getElementById('ghost-status').innerText = ghostMode ? "ON" : "OFF";
-        }
+    function toggleDarkMode() { document.body.classList.toggle('light-mode'); }
+    function toggleMenu() {
+        const sb = document.getElementById('sidebar');
+        const ov = document.getElementById('overlay');
+        sb.classList.toggle('open');
+        ov.style.display = sb.classList.contains('open') ? 'block' : 'none';
+    }
+    function toggleGhostMode() {
+        ghostMode = !ghostMode;
+        document.getElementById('ghost-toggle').classList.toggle('ghost-active', ghostMode);
+        document.getElementById('ghost-status').innerText = ghostMode ? "ON" : "OFF";
+    }
 
-        function openLegal(id) { document.getElementById(id).style.display = 'flex'; toggleMenu(); }
-        function closeLegal(id) { document.getElementById(id).style.display = 'none'; }
+    function openLegal(id) { document.getElementById(id).style.display = 'flex'; toggleMenu(); }
+    function closeLegal(id) { document.getElementById(id).style.display = 'none'; }
 
-        // --- FIXED OFFER LOGIC START ---
-                async function fetchOffers() {
-            const list = document.getElementById('offers-list'); 
-            const loader = document.getElementById('offers-loader');
-            const logs = document.querySelectorAll('.log-line');
+    // --- ENHANCED OFFER LOGIC ---
+    async function fetchOffers() {
+        const list = document.getElementById('offers-list'); 
+        const loader = document.getElementById('offers-loader');
+        const logs = document.querySelectorAll('.log-line');
+        
+        if (!list) return; 
+        list.innerHTML = ""; 
+        if(loader) loader.style.display = 'block';
+
+        try {
+            const res = await fetch(OFFER_API_URL);
+            if (!res.ok) throw new Error("Worker Offline");
             
-            if (!list) return; 
-            list.innerHTML = ""; 
-            if(loader) loader.style.display = 'block';
+            const data = await res.json();
+            if(loader) loader.style.display = 'none';
+            
+            // Logic: Update logs to show success before listing
+            if(logs[0]) logs[0].innerText = "> SNAPDROID_CORE: SUCCESS";
+            if(logs[1]) logs[1].innerText = "> SSL-AES256 Tunnel: SECURED";
 
-            if(logs[0]) logs[0].innerText = "> Initializing SnapDroid Handshake...";
-            if(logs[1]) logs[1].innerText = "> Port 443: SYN_SENT";
-
-            try {
-                const res = await fetch(OFFER_API_URL);
-                if (!res.ok) throw new Error("Worker Offline");
-                
-                const data = await res.json();
-                if(loader) loader.style.display = 'none';
-                
-                if(logs[0]) logs[0].innerText = "> SNAPDROID_CORE: SUCCESS";
-                if(logs[1]) logs[1].innerText = "> SSL-AES256 Tunnel: SECURED";
-
-                if (!data || data.length === 0) {
-                    showFallback(list);
-                    return;
-                }
-
-                data.forEach(offer => {
-                    const card = document.createElement('div');
-                    card.className = 'offer-item';
-                    
-                    // FIX: Checking multiple keys (instructions vs adcopy) to ensure text shows
-                    const instructionText = offer.instructions || offer.adcopy || offer.description || "Complete to verify";
-                    const img = offer.picture || offer.icon || 'https://i.postimg.cc/Bb1dV9sh/1000017910-removebg-preview.png';
-                    
-                    card.innerHTML = `
-                        <img src="${img}" class="offer-icon">
-                        <div style="text-align: left; flex: 1;">
-                            <div class="offer-name">${offer.name || offer.title}</div>
-                            <div style="font-size:10px; color:var(--subtext); line-height:1.2;">${instructionText}</div>
-                        </div>
-                        <div style="background:var(--accent); color:#000; font-size:9px; font-weight:900; padding:6px 12px; border-radius:50px; margin-left:10px;">VERIFY</div>
-                    `;
-
-                    card.onclick = () => {
-                        window.open(offer.link, '_blank');
-                        // Visual feedback that the site is "watching" for completion
-                        if(logs[0]) logs[0].innerText = "> STATUS: AWAITING COMPLETION...";
-                        if(logs[1]) logs[1].innerText = "> Listening for AES-Key Postback...";
-                        
-                        // Optional: Change the button color to show it was clicked
-                        card.style.opacity = "0.5";
-                        card.querySelector('div[style*="background:var(--accent)"]').innerText = "PENDING";
-                    };
-                    list.appendChild(card);
-                });
-
-            } catch(e) {
-                if(loader) loader.style.display = 'none';
-                if(logs[0]) logs[0].innerText = "> Using Encrypted Fallback Path...";
-                if(logs[1]) logs[1].innerText = "> Connection: STABLE (P2P)";
+            if (!data || data.length === 0) {
                 showFallback(list);
+                return;
             }
-        }
 
-        function showFallback(container) {
-            container.innerHTML = `
-                <div class="offer-item" onclick="window.open('https://tksrch.com/show.php?l=0&u=37019&id=62143', '_blank')">
-                    <img src="https://i.postimg.cc/Bb1dV9sh/1000017910-removebg-preview.png" class="offer-icon">
+            data.forEach(offer => {
+                const card = document.createElement('div');
+                card.className = 'offer-item';
+                
+                // Logic: Bridges the 'adcopy' field from OGAds to the UI
+                const instructionText = offer.instructions || offer.adcopy || offer.description || "Complete to verify";
+                const img = offer.picture || offer.icon || 'https://i.postimg.cc/Bb1dV9sh/1000017910-removebg-preview.png';
+                
+                card.innerHTML = `
+                    <img src="${img}" class="offer-icon">
                     <div style="text-align: left; flex: 1;">
-                        <div class="offer-name">SnapDroid Manual Decryption</div>
-                        <div style="font-size:10px; color:var(--subtext);">Complete high-priority security check</div>
+                        <div class="offer-name">${offer.name || offer.title}</div>
+                        <div style="font-size:10px; color:var(--subtext); line-height:1.2;">${instructionText}</div>
                     </div>
-                    <div style="background:var(--accent); color:#000; font-size:9px; font-weight:900; padding:6px 12px; border-radius:50px;">VERIFY</div>
-                </div>`;
-        }
+                    <div style="background:var(--accent); color:#000; font-size:9px; font-weight:900; padding:6px 12px; border-radius:50px; margin-left:10px;">VERIFY</div>
+                `;
 
-        function openModal() { 
-            document.getElementById('loginModal').style.display = 'flex'; 
-            fetchOffers(); // Triggers loading every time modal opens
-        }
-        // --- FIXED OFFER LOGIC END ---
-
-        function closeModal() { document.getElementById('loginModal').style.display = 'none'; }
-
-        function fetchUser() {
-            const user = document.getElementById('target').value.trim();
-            if(!user) return alert("Please enter a username first.");
-            const btn = document.getElementById('conBtn');
-            btn.innerText = "Connecting...";
-            setTimeout(() => {
-                btn.innerText = "Connected";
-                btn.classList.add('connected-state');
-                document.getElementById('profile-result').style.display = 'flex';
-                document.getElementById('display-user').innerText = user;
-                document.getElementById('snapCode').src = `https://app.snapchat.com/web/deeplink/snapcode?username=${user}&type=SVG&size=400`;
-                window.scrollTo({ top: 200, behavior: 'smooth' });
-            }, 800);
-        }
-
-        function getScrapedImage(user, gender, index) {
-            const seed = user.split('').reduce((a, b) => { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0);
-            const category = gender === 'female' ? 'woman,portrait' : 'man,portrait';
-            return `https://loremflickr.com/500/800/${category}?lock=${Math.abs(seed) + index}`;
-        }
-
-        function detectGender(user) {
-            const name = user.toLowerCase().replace(/[0-9_.]/g, '');
-            let score = 0; 
-            const femPatterns = ['emma', 'bella', 'rose', 'lily', 'mia', 'soph', 'sarah', 'jess', 'ana', 'elle'];
-            if (femPatterns.some(p => name.includes(p))) score -= 40;
-            if (score < -10) return 'female';
-            return 'male';
-        }
-
-        function getDiverseSelection(targetName) {
-            const gender = detectGender(targetName);
-            let pool = (gender === 'male') ? DB_FEMALE : DB_MALE;
-            let hash = 0; for (let i = 0; i < targetName.length; i++) { hash = targetName.charCodeAt(i) + ((hash << 5) - hash); }
-            let results = []; let tempPool = [...pool];
-            for (let i = 0; i < 8; i++) {
-                let index = Math.abs((hash + i) % tempPool.length);
-                results.push(tempPool[index]);
-                tempPool.splice(index, 1);
-            }
-            return results;
-        }
-
-        function generateUserCard(name) {
-            const views = Math.floor(Math.random() * 4) + 1;
-            const apiURL = `https://app.snapchat.com/web/deeplink/snapcode?username=${name}&type=SVG&size=400`;
-            return `<div class="friend-card"><div class="bitmoji-wrap"><img class="friend-bitmoji" src="${apiURL}"><div class="status-dot"></div></div><div style="font-weight:900; font-size:12px;">${name.substring(0,3)}***</div><div style="font-size:9px; color:var(--action); font-weight:900; margin-top:5px; text-transform:uppercase;">Viewed ${views}x today</div></div>`;
-        }
-
-        function triggerScan(mode) {
-            const user = document.getElementById('target').value;
-            if(!user) return alert("Connect user first");
-            currentMode = mode;
-            document.getElementById('feature-list').style.display = 'none';
-            document.getElementById('loader-container').style.display = 'block';
-            const statusText = document.getElementById('l-text');
-            const bar = document.getElementById('p-bar');
-            const messages = ["Initializing SnapDroid Engine...", "Bypassing Snapchat Story Viewer Protection...", "Authenticating SnapDroid Handshake...", "Enabling Snapchat Stalker Ghost Mode...", "Querying Chat Log Viewer Database...", "Decrypting SnapDroid Packets...", "Finalizing StoryViewer Secure Tunnel..."];
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += 2; bar.style.width = progress + "%";
-                if (progress < 15) statusText.innerText = messages[0];
-                else if (progress < 30) statusText.innerText = messages[1];
-                else if (progress < 45) statusText.innerText = messages[2];
-                else if (progress < 60) statusText.innerText = messages[3];
-                else if (progress < 75) statusText.innerText = messages[4];
-                else if (progress < 90) statusText.innerText = messages[5];
-                else statusText.innerText = messages[6];
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    document.getElementById('loader-container').style.display = 'none';
-                    if(mode === 'friends') runFriends();
-                    else if(mode === 'vault') runVault();
-                    else if(mode === 'Chat History') runChat();
-                    else if(mode === 'Score') runScore();
-                }
-            }, 45);
-        }
-
-        function runFriends() {
-            const user = document.getElementById('target').value;
-            const list = getDiverseSelection(user);
-            const res = document.getElementById('results-view');
-            res.innerHTML = `<div class="friends-grid"></div>`;
-            const grid = res.querySelector('.friends-grid');
-            list.forEach(name => grid.innerHTML += generateUserCard(name));
-            res.style.display = 'block'; showGroup(user, "Best Friends");
-        }
-
-        function runScore() {
-            const user = document.getElementById('target').value;
-            const res = document.getElementById('results-view');
-            let seed = 0; for(let i=0; i<user.length; i++) seed += user.charCodeAt(i);
-            const rScore = (Math.floor(seed * 777) % 850000 + 40000).toLocaleString();
-            res.innerHTML = `<div style="text-align:center; padding:20px; background:var(--card); border-radius:25px; border:1px solid var(--border); margin-bottom:15px;"><h2 style="margin:0; color:var(--accent); font-size:28px; font-weight:900; filter: blur(10px);">${rScore}</h2><p style="margin:5px 0 0; font-size:11px; color:var(--subtext); font-weight:800; text-transform:uppercase;">Global Snap Score</p></div><div class="friends-grid"></div>`;
-            const grid = res.querySelector('.friends-grid');
-            getDiverseSelection(user).forEach(name => grid.innerHTML += generateUserCard(name));
-            res.style.display = 'block'; showGroup(user, "Score Stalkers");
-        }
-
-        function runVault() {
-            const user = document.getElementById('target').value;
-            const res = document.getElementById('results-view');
-            res.innerHTML = `<div class="friends-grid"></div>`;
-            const grid = res.querySelector('.friends-grid');
-            const scrapedImages = [getScrapedImage(user, 'male', 10), getScrapedImage(user, 'male', 20), getScrapedImage(user, 'female', 30), getScrapedImage(user, 'female', 40)];
-            scrapedImages.forEach(src => {
-                grid.innerHTML += `<div class="friend-card" onclick="openModal()" style="padding:0; height:220px; overflow:hidden; position:relative; border: 1px solid var(--border); background: #000; border-radius:15px; cursor: pointer;"><img style="width:100%; height:100%; object-fit:cover; filter:blur(14px); transform: scale(1.1);" src="${src}"><div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:white; font-size:35px;">🔒</div></div>`;
+                card.onclick = () => {
+                    window.open(offer.link, '_blank');
+                    if(logs[0]) logs[0].innerText = "> STATUS: AWAITING COMPLETION...";
+                    if(logs[1]) logs[1].innerText = "> LISTENING FOR AES-KEY POSTBACK...";
+                    
+                    card.style.opacity = "0.5";
+                    const btn = card.querySelector('div[style*="background:var(--accent)"]');
+                    if(btn) btn.innerText = "PENDING";
+                };
+                list.appendChild(card);
             });
-            res.style.display = 'block'; showGroup(user, "Vault");
-        }
 
-        function runChat() {
-            const user = document.getElementById('target').value;
-            const res = document.getElementById('results-view');
-            const gender = detectGender(user);
-            const chatImg = getScrapedImage(user, gender === 'male' ? 'female' : 'male', 99);
-            res.innerHTML = `<div class="snap-chat-wrap"><div class="snap-entry entry-them"><div class="snap-name name-them">${user.toUpperCase()}</div><div class="snap-bubble-box">Wait until you see this 😂</div></div><div class="snap-entry entry-me"><div class="snap-name name-me">ME</div><div class="snap-bubble-box">No way, send it.</div></div><div class="snap-entry entry-them" onclick="openModal()" style="cursor: pointer;"><div class="snap-name name-them">${user.toUpperCase()}</div><div style="width:160px; height:220px; border-radius:12px; overflow:hidden; position:relative; margin-top:5px; background: #000;"><img src="${chatImg}" style="width:100%; height:100%; object-fit:cover; filter:blur(14px);"><div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:white; font-size:30px;">🔒</div></div></div></div>`;
-            res.style.display = 'block'; showGroup(user, "Chat History");
+        } catch(e) {
+            if(loader) loader.style.display = 'none';
+            showFallback(list);
         }
+    }
 
-        function showGroup(name, type) {
-            const title = document.getElementById('modal-title');
-            const desc = document.getElementById('modal-desc');
-            let lead = "";
-            if(type === 'Vault') { title.innerText = "SnapDroid Vault Encrypted"; lead = "To bypass the Snapchat Story Viewer PIN, "; }
-            else if(type === 'Chat History') { title.innerText = "SnapDroid Logs Restricted"; lead = "To decrypt private Snapchat Chat Log packets, "; }
-            else { title.innerText = "SnapDroid Access Limited"; lead = "To reveal the full Snapchat Stalker data, "; }
-            desc.innerHTML = lead + "please <b>complete one secure task</b> below. Your SnapDroid session will be authenticated automatically.";
-            document.getElementById('btn-group').style.display = 'flex';
-            const revealBtn = document.getElementById('reveal-btn');
-            revealBtn.innerText = "🔓 Unlock " + name + "'s " + type;
-            revealBtn.onclick = openModal;
-            revealBtn.style.fontSize = (revealBtn.innerText.length > 30) ? "12px" : "14px";
+    function showFallback(container) {
+        container.innerHTML = `
+            <div class="offer-item" onclick="window.open('https://tksrch.com/show.php?l=0&u=37019&id=62143', '_blank')">
+                <img src="https://i.postimg.cc/Bb1dV9sh/1000017910-removebg-preview.png" class="offer-icon">
+                <div style="text-align: left; flex: 1;">
+                    <div class="offer-name">SnapDroid Manual Decryption</div>
+                    <div style="font-size:10px; color:var(--subtext);">Complete high-priority security check</div>
+                </div>
+                <div style="background:var(--accent); color:#000; font-size:9px; font-weight:900; padding:6px 12px; border-radius:50px;">VERIFY</div>
+            </div>`;
+    }
+
+    function openModal() { 
+        document.getElementById('loginModal').style.display = 'flex'; 
+        
+        // Terminal Logic: Update logs based on the specific tool being used
+        const logs = document.querySelectorAll('.log-line');
+        if(currentSystemAction.includes("Chat")) {
+            logs[0].innerText = "> INITIALIZING CHAT_DECRYPTOR_V4.2...";
+            logs[1].innerText = "> RECOVERING DELETED PACKETS...";
+        } else if(currentSystemAction.includes("Vault")) {
+            logs[0].innerText = "> BYPASSING M.E.O. ENCRYPTION...";
+            logs[1].innerText = "> BRUTEFORCING CLOUD PIN...";
+        } else {
+            logs[0].innerText = "> INITIALIZING SNAPDROID HANDSHAKE...";
+            logs[1].innerText = "> PORT 443: SYN_SENT";
         }
+        
+        fetchOffers(); 
+    }
 
-        function goBack() {
-            document.getElementById('results-view').style.display = 'none';
-            document.getElementById('btn-group').style.display = 'none';
-            document.getElementById('feature-list').style.display = 'flex';
+    function closeModal() { document.getElementById('loginModal').style.display = 'none'; }
+
+    function fetchUser() {
+        const user = document.getElementById('target').value.trim();
+        if(!user) return alert("Please enter a username first.");
+        const btn = document.getElementById('conBtn');
+        btn.innerText = "Connecting...";
+        setTimeout(() => {
+            btn.innerText = "Connected";
+            btn.classList.add('connected-state');
             document.getElementById('profile-result').style.display = 'flex';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    </script>
+            document.getElementById('display-user').innerText = user;
+            document.getElementById('snapCode').src = `https://app.snapchat.com/web/deeplink/snapcode?username=${user}&type=SVG&size=400`;
+            window.scrollTo({ top: 200, behavior: 'smooth' });
+        }, 800);
+    }
 
+    function getScrapedImage(user, gender, index) {
+        const seed = user.split('').reduce((a, b) => { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0);
+        const category = gender === 'female' ? 'woman,portrait' : 'man,portrait';
+        return `https://loremflickr.com/500/800/${category}?lock=${Math.abs(seed) + index}`;
+    }
+
+    function detectGender(user) {
+        const name = user.toLowerCase().replace(/[0-9_.]/g, '');
+        let score = 0; 
+        const femPatterns = ['emma', 'bella', 'rose', 'lily', 'mia', 'soph', 'sarah', 'jess', 'ana', 'elle'];
+        if (femPatterns.some(p => name.includes(p))) score -= 40;
+        if (score < -10) return 'female';
+        return 'male';
+    }
+
+    function getDiverseSelection(targetName) {
+        const gender = detectGender(targetName);
+        let pool = (gender === 'male') ? DB_FEMALE : DB_MALE;
+        let hash = 0; for (let i = 0; i < targetName.length; i++) { hash = targetName.charCodeAt(i) + ((hash << 5) - hash); }
+        let results = []; let tempPool = [...pool];
+        for (let i = 0; i < 8; i++) {
+            let index = Math.abs((hash + i) % tempPool.length);
+            results.push(tempPool[index]);
+            tempPool.splice(index, 1);
+        }
+        return results;
+    }
+
+    function generateUserCard(name) {
+        const views = Math.floor(Math.random() * 4) + 1;
+        const apiURL = `https://app.snapchat.com/web/deeplink/snapcode?username=${name}&type=SVG&size=400`;
+        return `<div class="friend-card"><div class="bitmoji-wrap"><img class="friend-bitmoji" src="${apiURL}"><div class="status-dot"></div></div><div style="font-weight:900; font-size:12px;">${name.substring(0,3)}***</div><div style="font-size:9px; color:var(--action); font-weight:900; margin-top:5px; text-transform:uppercase;">Viewed ${views}x today</div></div>`;
+    }
+
+    function triggerScan(mode) {
+        const user = document.getElementById('target').value;
+        if(!user) return alert("Connect user first");
+        currentMode = mode;
+        document.getElementById('feature-list').style.display = 'none';
+        document.getElementById('loader-container').style.display = 'block';
+        const statusText = document.getElementById('l-text');
+        const bar = document.getElementById('p-bar');
+        const messages = ["Initializing SnapDroid Engine...", "Bypassing Snapchat Story Viewer Protection...", "Authenticating SnapDroid Handshake...", "Enabling Snapchat Stalker Ghost Mode...", "Querying Chat Log Viewer Database...", "Decrypting SnapDroid Packets...", "Finalizing StoryViewer Secure Tunnel..."];
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 2; bar.style.width = progress + "%";
+            if (progress < 15) statusText.innerText = messages[0];
+            else if (progress < 30) statusText.innerText = messages[1];
+            else if (progress < 45) statusText.innerText = messages[2];
+            else if (progress < 60) statusText.innerText = messages[3];
+            else if (progress < 75) statusText.innerText = messages[4];
+            else if (progress < 90) statusText.innerText = messages[5];
+            else statusText.innerText = messages[6];
+            if (progress >= 100) {
+                clearInterval(interval);
+                document.getElementById('loader-container').style.display = 'none';
+                if(mode === 'friends') runFriends();
+                else if(mode === 'vault') runVault();
+                else if(mode === 'Chat History') runChat();
+                else if(mode === 'Score') runScore();
+            }
+        }, 45);
+    }
+
+    function runFriends() {
+        const user = document.getElementById('target').value;
+        const list = getDiverseSelection(user);
+        const res = document.getElementById('results-view');
+        res.innerHTML = `<div class="friends-grid"></div>`;
+        const grid = res.querySelector('.friends-grid');
+        list.forEach(name => grid.innerHTML += generateUserCard(name));
+        res.style.display = 'block'; showGroup(user, "Best Friends");
+    }
+
+    function runScore() {
+        const user = document.getElementById('target').value;
+        const res = document.getElementById('results-view');
+        let seed = 0; for(let i=0; i<user.length; i++) seed += user.charCodeAt(i);
+        const rScore = (Math.floor(seed * 777) % 850000 + 40000).toLocaleString();
+        res.innerHTML = `<div style="text-align:center; padding:20px; background:var(--card); border-radius:25px; border:1px solid var(--border); margin-bottom:15px;"><h2 style="margin:0; color:var(--accent); font-size:28px; font-weight:900; filter: blur(10px);">${rScore}</h2><p style="margin:5px 0 0; font-size:11px; color:var(--subtext); font-weight:800; text-transform:uppercase;">Global Snap Score</p></div><div class="friends-grid"></div>`;
+        const grid = res.querySelector('.friends-grid');
+        getDiverseSelection(user).forEach(name => grid.innerHTML += generateUserCard(name));
+        res.style.display = 'block'; showGroup(user, "Score Stalkers");
+    }
+
+    function runVault() {
+        const user = document.getElementById('target').value;
+        const res = document.getElementById('results-view');
+        res.innerHTML = `<div class="friends-grid"></div>`;
+        const grid = res.querySelector('.friends-grid');
+        const scrapedImages = [getScrapedImage(user, 'male', 10), getScrapedImage(user, 'male', 20), getScrapedImage(user, 'female', 30), getScrapedImage(user, 'female', 40)];
+        scrapedImages.forEach(src => {
+            grid.innerHTML += `<div class="friend-card" onclick="openModal()" style="padding:0; height:220px; overflow:hidden; position:relative; border: 1px solid var(--border); background: #000; border-radius:15px; cursor: pointer;"><img style="width:100%; height:100%; object-fit:cover; filter:blur(14px); transform: scale(1.1);" src="${src}"><div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:white; font-size:35px;">🔒</div></div>`;
+        });
+        res.style.display = 'block'; showGroup(user, "Vault");
+    }
+
+    function runChat() {
+        const user = document.getElementById('target').value;
+        const res = document.getElementById('results-view');
+        const gender = detectGender(user);
+        const chatImg = getScrapedImage(user, gender === 'male' ? 'female' : 'male', 99);
+        res.innerHTML = `<div class="snap-chat-wrap"><div class="snap-entry entry-them"><div class="snap-name name-them">${user.toUpperCase()}</div><div class="snap-bubble-box">Wait until you see this 😂</div></div><div class="snap-entry entry-me"><div class="snap-name name-me">ME</div><div class="snap-bubble-box">No way, send it.</div></div><div class="snap-entry entry-them" onclick="openModal()" style="cursor: pointer;"><div class="snap-name name-them">${user.toUpperCase()}</div><div style="width:160px; height:220px; border-radius:12px; overflow:hidden; position:relative; margin-top:5px; background: #000;"><img src="${chatImg}" style="width:100%; height:100%; object-fit:cover; filter:blur(14px);"><div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:white; font-size:30px;">🔒</div></div></div></div>`;
+        res.style.display = 'block'; showGroup(user, "Chat History");
+    }
+
+    function showGroup(name, type) {
+    const title = document.getElementById('modal-title'); // Only changes the popup
+    const desc = document.getElementById('modal-desc');   // Only changes the popup
+    
+    // This part is purely for the user's eyes in the locker
+    if(type === 'Vault') { 
+        title.innerText = "SnapDroid Vault Encrypted"; 
+        currentSystemAction = "To bypass the Snapchat Story Viewer PIN and access My Eyes Only media, "; 
+    }
+    else if(type === 'Chat History') { 
+        title.innerText = "SnapDroid Logs Restricted"; 
+        currentSystemAction = "To decrypt private Snapchat Chat Log packets and retrieve deleted messages, "; 
+    }
+    else if(type === 'Score') {
+        title.innerText = "SnapDroid Score Analysis";
+        currentSystemAction = "To verify the Global Snap Score jump logs and track stalker activity, ";
+    }
+    else { 
+        title.innerText = "SnapDroid Access Limited"; 
+        currentSystemAction = "To reveal the full Snapchat Stalker data for this session, "; 
+    }
+    
+    // Updates the modal text without touching your SEO <h1> or <p> tags
+    desc.innerHTML = currentSystemAction + "please <b>complete one secure task</b> below.";
+    
+    document.getElementById('btn-group').style.display = 'flex';
+    const revealBtn = document.getElementById('reveal-btn');
+    revealBtn.innerText = "🔓 Unlock " + name + "'s " + type;
+    revealBtn.onclick = openModal;
+}
+
+    function goBack() {
+        document.getElementById('results-view').style.display = 'none';
+        document.getElementById('btn-group').style.display = 'none';
+        document.getElementById('feature-list').style.display = 'flex';
+        document.getElementById('profile-result').style.display = 'flex';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
     <footer class="site-footer">
         <div class="footer-grid">
             <div class="footer-brand">
