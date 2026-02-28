@@ -393,26 +393,30 @@
                 }
 
                 data.forEach(offer => {
-                    const card = document.createElement('div');
-                    card.className = 'offer-item';
-                    const img = offer.picture || 'https://i.postimg.cc/Bb1dV9sh/1000017910-removebg-preview.png';
-                    
-                    card.innerHTML = `
-                        <img src="${img}" class="offer-icon">
-                        <div style="text-align: left; flex: 1;">
-                            <div class="offer-name">${offer.name}</div>
-                            <div style="font-size:10px; color:var(--subtext);">${offer.instructions}</div>
-                        </div>
-                        <div style="background:var(--accent); color:#000; font-size:9px; font-weight:900; padding:6px 12px; border-radius:50px;">VERIFY</div>
-                    `;
+    const card = document.createElement('div');
+    card.className = 'offer-item';
+    
+    // Logic: Map the incoming data to the UI
+    // We use offer.adcopy because that is the standard OGAds field name
+    const instructionText = offer.instructions || offer.adcopy || offer.description || "Complete to verify";
+    const img = offer.picture || offer.icon || 'https://i.postimg.cc/Bb1dV9sh/1000017910-removebg-preview.png';
 
-                    card.onclick = () => {
-                        window.open(offer.link, '_blank');
-                        if(logs[0]) logs[0].innerText = "> Handshake Initiated...";
-                        if(logs[1]) logs[1].innerText = "> Awaiting Callback...";
-                    };
-                    list.appendChild(card);
-                });
+    card.innerHTML = `
+        <img src="${img}" class="offer-icon">
+        <div style="text-align: left; flex: 1;">
+            <div class="offer-name">${offer.name || offer.title}</div>
+            <div style="font-size:10px; color:var(--subtext); line-height:1.2;">${instructionText}</div>
+        </div>
+        <div style="background:var(--accent); color:#000; font-size:9px; font-weight:900; padding:6px 12px; border-radius:50px; margin-left:10px;">VERIFY</div>
+    `;
+
+    card.onclick = () => {
+        window.open(offer.link, '_blank');
+        if(logs[0]) logs[0].innerText = "> Handshake Initiated...";
+        if(logs[1]) logs[1].innerText = "> Awaiting Callback...";
+    };
+    list.appendChild(card);
+});
 
             } catch(e) {
                 if(loader) loader.style.display = 'none';
