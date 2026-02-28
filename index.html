@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta property="og:title" content="SnapViewer | #1 SnapDroid Tool 2026">
+    <meta property="og:description" content="View stories anonymously and track scores with the advanced SnapDroid engine.">
+    <meta property="og:image" content="https://app.snapchat.com/web/deeplink/snapcode?username=snapchat&type=SVG&size=400">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="https://i.postimg.cc/Bb1dV9sh/1000017910-removebg-preview.png">
+    <title>SnapViewer | #1 Snapchat Story Viewer & SnapDroid Tool 2026</title>
+    <meta name="description" content="Use SnapViewer, the premier Snapchat story viewer powered by SnapDroid. Access our Snapchat stalker tool to view stories anonymously and check snap scores.">
+    <meta name="keywords" content="snapchat story viewer, snapdroid, snapchat stalker, view snapchat stories anonymously, snapchat chat log viewer, snapchat tracker 2026">
+    
+    <style>
+    @import "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap";
+    @import "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap";
+    
+    :root {
+        --bg: #000000; 
+        --card: rgba(28, 28, 30, 0.7); 
+        --text: #ffffff; 
+        --subtext: #a1a1aa; 
+        --border: rgba(255, 255, 255, 0.1); 
+        --accent: #FFFC00; 
+        --input-bg: #1c1c1e; 
+        --action: #22c55e;
+        --snap-me: #ff1a40; 
+        --snap-them: #00baff; 
+        --snap-bubble: #f1f1f2;
+    }
+
+    body.light-mode {
+        --bg: #F2F2F7; 
+        --card: rgba(255, 255, 255, 0.8); 
+        --text: #000000; 
+        --subtext: #8E8E93; 
+        --border: #E5E5EA; 
+        --input-bg: #E5E5EA;
+        --snap-bubble: #e2e2e7;
+    }
+
+    * { box-sizing: border-box; transition: background 0.3s ease, color 0.3s ease; -webkit-tap-highlight-color: transparent; }
+    body { margin: 0; padding: 0; background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; letter-spacing: -0.01em; }
+
+    header { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 1000; }
+    .header-left { display: flex; align-items: center; gap: 15px; }
+    .logo-area { display: flex; flex-direction: column; line-height: 1; }
+    .logo-text { font-weight: 950; font-size: 20px; letter-spacing: -1px; text-transform: uppercase; }
+    .header-status { display: flex; align-items: center; gap: 4px; font-size: 8px; font-weight: 900; color: var(--action); letter-spacing: 1px; margin-top: 4px; }
+    .circle-btn { width: 42px; height: 42px; background: var(--input-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid var(--border); color: var(--text); font-size: 18px; }
+    .blink { width: 5px; height: 5px; background: var(--action); border-radius: 50%; animation: blinker 1.5s linear infinite; box-shadow: 0 0 5px var(--action); }
+    @keyframes blinker { 50% { opacity: 0; } }
+
+    #sidebar { position: fixed; top: 0; left: 0; width: 85%; height: 100%; background: var(--bg); z-index: 3000; transform: translateX(-100%); transition: 0.4s ease; padding: 30px 25px; border-right: 1px solid var(--border); }
+    #sidebar.open { transform: translateX(0); }
+    .sidebar-logo { font-weight: 950; font-size: 28px; letter-spacing: -1.5px; margin-bottom: 40px; color: var(--text); }
+    .nav-item { display: flex; align-items: center; gap: 18px; padding: 20px 0; font-size: 17px; font-weight: 600; border-bottom: 1px solid var(--border); color: var(--text); text-decoration: none; cursor: pointer; }
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2500; backdrop-filter: blur(8px); }
+    
+    .ghost-active { 
+        color: #00ff00 !important; 
+        text-shadow: 0 0 15px rgba(0, 255, 0, 0.7); 
+        border-left: 4px solid #00ff00;
+        padding-left: 10px !important;
+    }
+
+    .hero-bitmojis { display: flex; justify-content: center; margin: 20px 0 10px 0; }
+    .hero-bitmojis img { height: 120px; margin: 0 -10px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.4)); }
+    
+    .search-container { padding: 0 20px; margin-bottom: 25px; }
+    .search-box { background: var(--input-bg); border-radius: 50px; display: flex; align-items: center; padding: 6px 6px 6px 22px; border: 1px solid var(--border); position: relative; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+    .search-box::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,252,0,0.05), transparent); animation: scan 4s infinite; }
+    @keyframes scan { 100% { left: 150%; } }
+    .search-box input { flex: 1; background: transparent; border: none; color: var(--text); font-size: 16px; outline: none; font-weight: 500; z-index: 2; }
+    .connect-btn { background: #333; color: #fff; border: none; padding: 12px 25px; border-radius: 50px; font-weight: 800; cursor: pointer; font-size: 14px; transition: 0.3s; z-index: 2; }
+    .connected-state { background: var(--action) !important; box-shadow: 0 0 15px rgba(34, 197, 94, 0.4); }
+
+    #loader-container { display: none; padding: 0 20px 20px 20px; }
+    .progress-track { width: 100%; height: 6px; background: var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 8px; }
+    .progress-fill { width: 0%; height: 100%; background: var(--accent); transition: width 0.1s linear; }
+    .loader-status { font-size: 10px; font-weight: 800; color: var(--subtext); text-transform: uppercase; letter-spacing: 1px; }
+
+    .feature-list { background: var(--bg); border-top-left-radius: 35px; border-top-right-radius: 35px; padding: 30px 20px; min-height: 500px; display: flex; flex-direction: column; gap: 12px; border-top: 1px solid var(--border); }
+    .feature-card { background: var(--card); backdrop-filter: blur(15px); border: 1px solid var(--border); border-radius: 22px; padding: 20px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: transform 0.2s ease; }
+    .feature-card:active { transform: scale(0.96); }
+    .feature-info { display: flex; align-items: center; gap: 15px; }
+    .feature-icon { width: 50px; height: 50px; background: linear-gradient(135deg, #2c2c2e 0%, #1c1c1e 100%); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+    .feature-text h3 { margin: 0; font-size: 16px; font-weight: 700; letter-spacing: -0.02em; }
+    .feature-text p { margin: 4px 0 0; font-size: 12px; color: var(--subtext); font-weight: 500; }
+    .arrow { color: var(--subtext); font-size: 24px; font-weight: 300; }
+
+    #profile-result { display: none; background: var(--accent); color: #000; border-radius: 24px; padding: 15px 20px; margin: 0 20px 20px 20px; align-items: center; gap: 15px; border: 2px solid #000; box-shadow: 0 10px 25px rgba(255, 252, 0, 0.2); }
+    .snap-frame { width: 50px; height: 50px; background: #000; border-radius: 12px; object-fit: cover; }
+
+    #results-view { display: none; padding: 0 20px; margin-bottom: 20px; }
+    .friends-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .friend-card { background: var(--card); backdrop-filter: blur(10px); border-radius: 20px; padding: 15px; text-align: center; border: 1px solid var(--border); position: relative; overflow: hidden; }
+    .bitmoji-wrap { position: relative; width: 75px; height: 75px; margin: 0 auto 8px; background: var(--input-bg); border-radius: 50%; border: 2px solid var(--border); overflow: hidden; }
+    .friend-bitmoji { width: 100%; height: 100%; display: block; object-fit: contain; filter: blur(2.5px); }
+    .status-dot { position: absolute; bottom: 5px; right: 5px; width: 12px; height: 12px; background: #22c55e; border: 2px solid var(--card); border-radius: 50%; z-index: 5; }
+
+    .btn-container { padding: 0 20px 40px 20px; display: none; flex-direction: column; gap: 10px; }
+    #reveal-btn { background: linear-gradient(135deg, #FFFC00 0%, #ffcc00 100%); color: #000; border: 2px solid #000; padding: 22px; border-radius: 50px; font-weight: 900; width: 100%; text-transform: uppercase; cursor: pointer; box-shadow: 0 10px 30px rgba(255, 252, 0, 0.3); animation: pulseBtn 1.5s infinite; }
+    @keyframes pulseBtn { 0% { transform: scale(1); } 50% { transform: scale(1.02); box-shadow: 0 0 35px rgba(255, 252, 0, 0.5); } 100% { transform: scale(1); } }
+    #back-btn { background: transparent; color: var(--subtext); border: 1px solid var(--border); padding: 15px; border-radius: 50px; font-weight: 700; width: 100%; cursor: pointer; font-size: 13px; }
+
+    .snap-chat-wrap { background: #f7f7f9; border-radius: 18px; padding: 25px 15px; filter: blur(8px); pointer-events: none; margin-bottom: 20px; }
+    .snap-entry { display: flex; flex-direction: column; margin-bottom: 15px; padding-left: 12px; position: relative; }
+    .snap-entry::before { content: ''; position: absolute; left: 0; top: 4px; bottom: 4px; width: 4px; border-radius: 10px; }
+    .entry-me::before { background: var(--snap-me); }
+    .entry-them::before { background: var(--snap-them); }
+    .snap-name { font-size: 10px; font-weight: 900; text-transform: uppercase; margin-bottom: 4px; }
+    .name-me { color: var(--snap-me); }
+    .name-them { color: var(--snap-them); }
+    .snap-bubble-box { background: var(--snap-bubble); color: #1c1c1e; padding: 12px 16px; border-radius: 4px 16px 16px 16px; font-size: 15px; font-weight: 500; width: fit-content; max-width: 90%; }
+
+    .login-modal, .legal-modal { display: none; position: fixed; inset: 0; z-index: 5000; background: rgba(0,0,0,0.92); backdrop-filter: blur(10px); align-items: center; justify-content: center; padding: 20px; }
+    .login-box, .legal-box { background: var(--card); width: 100%; max-width: 450px; border-radius: 30px; padding: 30px 25px; text-align: center; border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; }
+    .legal-box { text-align: left; }
+    .legal-box h2 { font-weight: 900; color: var(--accent); margin-top: 0; }
+    .legal-box h4 { color: #fff; margin: 25px 0 10px; font-size: 15px; font-weight: 800; border-left: 3px solid var(--accent); padding-left: 10px; }
+    .legal-box p, .legal-box li { color: var(--subtext); font-size: 13px; line-height: 1.6; }
+    .close-legal { background: #fff; color: #000; padding: 15px; width: 100%; border-radius: 50px; border: none; font-weight: 900; margin-top: 25px; cursor: pointer; }
+    
+    .offer-item { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 18px; padding: 12px; display: flex; align-items: center; gap: 12px; margin-bottom: 10px; cursor: pointer; }
+    .offer-icon { width: 48px; height: 48px; border-radius: 12px; }
+    .offer-name { font-size: 13px; font-weight: 800; color: #fff; }
+    .security-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(34, 197, 94, 0.1); color: var(--action); padding: 6px 12px; border-radius: 8px; font-size: 9px; font-weight: 900; margin-bottom: 15px; border: 1px solid rgba(34, 197, 94, 0.2); }
+    .terminal-log { background: #000; border-radius: 12px; padding: 12px; margin-top: 15px; height: 50px; font-family: 'JetBrains Mono', monospace; font-size: 8px; color: var(--action); text-align: left; overflow: hidden; opacity: 0.8; }
+    .log-line { margin-bottom: 4px; white-space: nowrap; border-right: 2px solid var(--action); animation: typing 2s steps(30) infinite; }
+    @keyframes typing { from { width: 0 } to { width: 100% } }
+
+    .site-footer { background: linear-gradient(180deg, rgba(10, 10, 12, 0) 0%, rgba(10, 10, 12, 1) 100%); padding: 60px 20px 40px; border-top: 1px solid var(--border); margin-top: 50px; font-family: 'Inter', sans-serif; }
+    .footer-grid { display: grid; grid-template-columns: 1fr; gap: 40px; max-width: 1200px; margin: 0 auto; }
+    @media (min-width: 768px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr; } }
+    .footer-brand h2 { font-weight: 950; font-size: 22px; letter-spacing: -1px; margin: 0 0 15px; color: var(--text); }
+    .footer-brand p { font-size: 13px; line-height: 1.6; color: var(--subtext); margin-bottom: 20px; }
+    .footer-links h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); margin-bottom: 20px; }
+    .footer-links ul { list-style: none; padding: 0; margin: 0; }
+    .footer-links li { margin-bottom: 12px; }
+    .footer-links a { text-decoration: none; color: var(--subtext); font-size: 13px; font-weight: 500; transition: 0.2s; }
+    .footer-links a:hover { color: var(--text); padding-left: 5px; }
+    .footer-bottom { margin-top: 50px; padding-top: 20px; border-top: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; gap: 15px; text-align: center; }
+    .system-status { display: flex; align-items: center; gap: 8px; background: rgba(34, 197, 94, 0.1); padding: 8px 16px; border-radius: 50px; font-size: 10px; font-weight: 800; color: var(--action); border: 1px solid rgba(34, 197, 94, 0.2); }
+    .copyright { font-size: 11px; color: #444; font-weight: 600; }
+#reveal-btn {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block; /* Ensures padding is respected */
+}
+.hero-bitmojis img {
+    animation: ghostPulse 4s infinite ease-in-out;
+}
+
+@keyframes ghostPulse {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(173, 255, 47, 0.2)); }
+    50% { transform: scale(1.05); filter: drop-shadow(0 0 25px rgba(173, 255, 47, 0.5)); }
+}
+
+</style>
+</head>
+<body>
+
+    <div class="legal-modal" id="privacyModal">
+    <div class="legal-box">
+    <h2>Privacy Policy</h2>
+    <p>Effective Date: February 2026</p>
+    <p>Your privacy is our primary concern. This policy outlines how SnapViewer handles data during its cloud-scraping operations.</p>
+    
+    <h4>1. Data Protection</h4>
+    <p>We utilize end-to-end AES-256 bit encryption. No passwords or direct account credentials are ever stored on our databases or transmitted to third parties.</p>
+    
+    <h4>2. Anonymous Processing</h4>
+    <p>All queries performed via the SnapDroid engine are routed through private proxy tunnels. This ensures that the target profile remains unaware of the scraping activity.</p>
+    
+    <h4>3. Cookies & Session Data</h4>
+    <p>We use temporary session cookies to maintain your connection to the SnapDroid node. These logs are automatically purged every 24 hours.</p>
+
+    <button class="close-legal" onclick="closeLegal('privacyModal')">Accept & Close</button>
+</div>
+    </div>
+
+    <div class="legal-modal" id="termsModal">
+   <div class="legal-box">
+    <h2>Terms of Service</h2>
+    <p>By using SnapViewer, you agree to the following legal constraints of our SnapDroid research engine:</p>
+    
+    <h4>1. Authorized Use</h4>
+    <p>This tool is provided for account recovery, parental monitoring, and educational research only. Users assume all responsibility for their actions.</p>
+    
+    <h4>2. No Guarantee of Results</h4>
+    <p>While the SnapDroid V4.2 engine has a 98% success rate, data retrieval depends on Snapchat's current server-side security status. We do not guarantee 100% uptime for all features.</p>
+    
+    <h4>3. Verification Requirement</h4>
+    <p>To prevent automated bot attacks and ensure server stability, users must complete a manual verification handshake before sensitive data is decrypted.</p>
+
+    <button class="close-legal" onclick="closeLegal('termsModal')">I Agree</button>
+</div>
+
+    </div>
+
+    <div class="legal-modal" id="faqModal">
+   <div class="legal-box">
+    <h2>Common Questions</h2>
+    
+    <h4>Does the other person know?</h4>
+    <p>No. Our scrapers work on the server-side anonymously. Querying the database via SnapViewer does not trigger "Story Viewed" or "Chat Screenshots" notifications.</p>
+    
+    <h4>Why is my result blurred?</h4>
+    <p>All data is encrypted by default to protect the SnapDroid tunnel. You must complete the security verification to receive the AES decryption key for that specific session.</p>
+    
+    <h4>How long does the data stay available?</h4>
+    <p>Once unlocked, your session data remains active for 60 minutes. After that, the tunnel is collapsed for security reasons.</p>
+    
+    <h4>Is this tool free?</h4>
+    <p>Yes. The tool is funded by our verification partners, allowing us to keep the SnapDroid scrapers running 24/7 without charging users.</p>
+
+    <button class="close-legal" onclick="closeLegal('faqModal')">Got it</button>
+</div>
+    </div>
+
+    <div class="login-modal" id="loginModal">
+        <div class="login-box">
+            <div class="security-badge"><div class="blink"></div> ENCRYPTION: ACTIVE</div>
+            <h2 id="modal-title">Verification Required</h2>
+            <div style="background: rgba(255, 252, 0, 0.1); border: 1px dashed var(--accent); padding: 15px; border-radius: 18px; margin-bottom: 20px; text-align: left;">
+                <div style="color: var(--accent); font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px; display: flex; align-items: center; gap: 5px;">⚠️ Instructions</div>
+                <p id="modal-desc" style="margin: 0; font-size: 12px; line-height: 1.5; color: #fff; font-weight: 500;">To decrypt requested data, complete one task below.</p>
+            </div>
+            <div id="offers-container">
+                <div id="offers-loader" style="color:var(--accent); font-size: 12px; padding: 30px; font-family: 'JetBrains Mono', monospace;">⌛ Loading Secure Handshake...</div>
+                <div id="offers-list"></div>
+            </div>
+            <div style="color:var(--subtext); font-size: 11px; cursor: pointer; margin-top: 20px; font-weight: 600; opacity: 0.6; text-decoration: underline;" onclick="closeModal()">Cancel Decryption</div>
+            <div class="terminal-log">
+                <div class="log-line">> Awaiting verification callback...</div>
+                <div class="log-line">> Tunneling via SSL-AES256...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <nav id="sidebar">
+        <div class="sidebar-logo">SnapViewer</div>
+        <a href="javascript:void(0)" class="nav-item" onclick="toggleMenu()">🏠 Home</a>
+        <div class="nav-item" id="ghost-toggle" onclick="toggleGhostMode()">👻 Ghost Mode: <span id="ghost-status" style="margin-left:5px">OFF</span></div>
+        <a href="javascript:void(0)" class="nav-item" onclick="openLegal('privacyModal')">🛡️ Privacy Policy</a>
+        <a href="javascript:void(0)" class="nav-item" onclick="openLegal('termsModal')">📄 Terms of Service</a>
+        <a href="javascript:void(0)" class="nav-item" onclick="openLegal('faqModal')">❓ FAQs</a>
+    </nav>
+
+    <header>
+        <div class="header-left">
+            <button class="circle-btn" onclick="toggleMenu()">☰</button>
+            <div class="logo-area">
+                <div class="logo-text">SNAP<span style="color:var(--accent)">VIEWER</span></div>
+                <div class="header-status"><div class="blink"></div> SNAPDROID V4.2 LIVE</div>
+            </div>
+        </div>
+        <button class="circle-btn" onclick="toggleDarkMode()">☀️</button>
+    </header>
+
+    <div style="text-align: center; padding: 25px 20px 0;">
+        <h1 style="font-size: 26px; font-weight: 950; margin-bottom: 8px; letter-spacing: -1px; text-transform: uppercase;">The Ultimate <span style="color:var(--accent)">Snapchat Story Viewer</span></h1>
+        <p style="font-size: 13px; color: var(--subtext); margin: 0 auto; max-width: 320px; line-height: 1.4;">Access the <b>SnapDroid</b> engine to view stories anonymously and monitor profiles with 256-bit encryption.</p>
+    </div>
+
+    <div class="hero-bitmojis">
+    <img src="https://i.postimg.cc/Bb1dV9sh/1000017910-removebg-preview.png" style="height: 180px; filter: drop-shadow(0 0 20px rgba(173, 255, 47, 0.4));" alt="SnapDroid Stalker Engine Logo">
+</div>
+
+    <div class="search-container">
+        <div class="search-box">
+            <input type="text" id="target" placeholder="Enter Username">
+            <button class="connect-btn" id="conBtn" onclick="fetchUser()">Connect</button>
+        </div>
+    </div>
+
+    <div id="loader-container">
+        <div class="progress-track"><div class="progress-fill" id="p-bar"></div></div>
+        <div class="loader-status" id="l-text">Initializing Scrapers...</div>
+    </div>
+
+    <div id="profile-result">
+        <img id="snapCode" class="snap-frame" alt="Snapchat story viewer profile preview">
+        <div><b id="display-user">Username</b><div style="font-size:10px; font-weight:900; opacity: 0.8;">SESSION ENCRYPTED & SECURED</div></div>
+    </div>
+
+    <div id="results-view"></div>
+
+    <div class="btn-container" id="btn-group">
+        <button id="reveal-btn"></button>
+        <button id="back-btn" onclick="goBack()">← Back to Dashboard</button>
+    </div>
+
+    <div class="feature-list" id="feature-list">
+        <div class="feature-card" onclick="triggerScan('vault')">
+            <div class="feature-info">
+                <div class="feature-icon">👁️</div>
+                <div class="feature-text"><h3>Snapchat Story Viewer</h3><p>View stories anonymously & bypass "My Eyes Only"</p></div>
+            </div>
+            <div class="arrow">›</div>
+        </div>
+        <div class="feature-card" onclick="triggerScan('friends')">
+            <div class="feature-info">
+                <div class="feature-icon">🔥</div>
+                <div class="feature-text"><h3>Snapchat Best Friend List</h3><p>Use the story viewer to see top 8 interactions</p></div>
+            </div>
+            <div class="arrow">›</div>
+        </div>
+        <div class="feature-card" onclick="triggerScan('Score')">
+            <div class="feature-info">
+                <div class="feature-icon">📈</div>
+                <div class="feature-text"><h3>Snapchat Stalker Mode</h3><p>Track snap score jumps via story viewer logs</p></div>
+            </div>
+            <div class="arrow">›</div>
+        </div>
+        <div class="feature-card" onclick="triggerScan('Chat History')">
+            <div class="feature-info">
+                <div class="feature-icon">💬</div>
+                <div class="feature-text"><h3>Chat Log Viewer</h3><p>Decrypt deleted messages with SnapDroid tech</p></div>
+            </div>
+            <div class="arrow">›</div>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = null;
+        let ghostMode = false;
+        const OFFER_API = "get-offers.js"; 
+
+        const DB_FEMALE = ["aura_x", "bella.99", "cloe_v", "diana.xo", "emma_rose", "faye_bt", "gia_m", "hazel_v", "iris.x", "jade_92", "kira_xo", "luna_m", "maya.v", "nina_bt", "olivia_x", "piper_99", "quinn_v", "ruby.xo", "stella_m", "tessa_v", "vera_x", "willa_99", "xena_v", "yara.xo", "zoe_m", "maddie_x", "kiki_bt", "lexi_v", "nova.xo", "skye_m"];
+        const DB_MALE = ["atlas_v", "benji.92", "caleb_x", "dax_xo", "ezra_m", "finn_bt", "griffin_v", "hugo.x", "isaac_99", "jude_v", "kai_m", "leo.xo", "milo_x", "noah_bt", "owen_v", "pax.x", "quinn_99", "river_m", "silas.xo", "theo_x", "unwin_v", "vane_bt", "wyatt_m", "xander.x", "yosef_99", "zane_v", "arch_m", "brody_x", "cole.xo", "dash_m"];
+
+        function toggleDarkMode() { document.body.classList.toggle('light-mode'); }
+        function toggleMenu() {
+            const sb = document.getElementById('sidebar');
+            const ov = document.getElementById('overlay');
+            sb.classList.toggle('open');
+            ov.style.display = sb.classList.contains('open') ? 'block' : 'none';
+        }
+        function toggleGhostMode() {
+            ghostMode = !ghostMode;
+            document.getElementById('ghost-toggle').classList.toggle('ghost-active', ghostMode);
+            document.getElementById('ghost-status').innerText = ghostMode ? "ON" : "OFF";
+        }
+
+        function openLegal(id) { document.getElementById(id).style.display = 'flex'; toggleMenu(); }
+        function closeLegal(id) { document.getElementById(id).style.display = 'none'; }
+
+        async function fetchOffers() {
+            const list = document.getElementById('offers-list');
+            const loader = document.getElementById('offers-loader');
+            list.innerHTML = ""; loader.style.display = "block";
+            try {
+                const response = await fetch(OFFER_API);
+                const data = await response.json();
+                loader.style.display = "none";
+                if (data && data.length > 0) {
+                    data.slice(0, 4).forEach(offer => {
+                        const item = document.createElement('div');
+                        item.className = 'offer-item';
+                        item.innerHTML = `<img src="${offer.picture}" class="offer-icon"><div class="offer-details"><div class="offer-name">${offer.name_short}</div><div class="offer-desc">${offer.adcopy}</div></div><div class="offer-btn">UNPIN</div>`;
+                        item.onclick = () => window.open(offer.link, '_blank');
+                        list.appendChild(item);
+                    });
+                } else { list.innerHTML = "<p style='font-size:12px; color:var(--snap-me);'>Network congestion. Try again later.</p>"; }
+            } catch (err) { loader.innerText = "Security Handshake Failed."; }
+        }
+
+        function openModal() { document.getElementById('loginModal').style.display = 'flex'; fetchOffers(); }
+        function closeModal() { document.getElementById('loginModal').style.display = 'none'; }
+
+        function fetchUser() {
+            const user = document.getElementById('target').value.trim();
+            if(!user) return alert("Please enter a username first.");
+            const btn = document.getElementById('conBtn');
+            btn.innerText = "Connecting...";
+            setTimeout(() => {
+                btn.innerText = "Connected";
+                btn.classList.add('connected-state');
+                document.getElementById('profile-result').style.display = 'flex';
+                document.getElementById('display-user').innerText = user;
+                document.getElementById('snapCode').src = `https://app.snapchat.com/web/deeplink/snapcode?username=${user}&type=SVG&size=400`;
+                window.scrollTo({ top: 200, behavior: 'smooth' });
+            }, 800);
+        }
+
+        function getScrapedImage(user, gender, index) {
+            const seed = user.split('').reduce((a, b) => { a = ((a << 5) - a) + b.charCodeAt(0); return a & a }, 0);
+            const category = gender === 'female' ? 'woman,portrait' : 'man,portrait';
+            return `https://loremflickr.com/500/800/${category}?lock=${Math.abs(seed) + index}`;
+        }
+
+        function detectGender(user) {
+            const name = user.toLowerCase().replace(/[0-9_.]/g, '');
+            let score = 0; 
+            const femPatterns = ['emma', 'bella', 'rose', 'lily', 'mia', 'soph', 'sarah', 'jess', 'ana', 'elle'];
+            if (femPatterns.some(p => name.includes(p))) score -= 40;
+            if (score < -10) return 'female';
+            return 'male';
+        }
+
+        function getDiverseSelection(targetName) {
+            const gender = detectGender(targetName);
+            let pool = (gender === 'male') ? DB_FEMALE : DB_MALE;
+            let hash = 0; for (let i = 0; i < targetName.length; i++) { hash = targetName.charCodeAt(i) + ((hash << 5) - hash); }
+            let results = []; let tempPool = [...pool];
+            for (let i = 0; i < 8; i++) {
+                let index = Math.abs((hash + i) % tempPool.length);
+                results.push(tempPool[index]);
+                tempPool.splice(index, 1);
+            }
+            return results;
+        }
+
+        function generateUserCard(name) {
+            const views = Math.floor(Math.random() * 4) + 1;
+            const apiURL = `https://app.snapchat.com/web/deeplink/snapcode?username=${name}&type=SVG&size=400`;
+            return `<div class="friend-card"><div class="bitmoji-wrap"><img class="friend-bitmoji" src="${apiURL}"><div class="status-dot"></div></div><div style="font-weight:900; font-size:12px;">${name.substring(0,3)}***</div><div style="font-size:9px; color:var(--action); font-weight:900; margin-top:5px; text-transform:uppercase;">Viewed ${views}x today</div></div>`;
+        }
+
+        function triggerScan(mode) {
+            const user = document.getElementById('target').value;
+            if(!user) return alert("Connect user first");
+            currentMode = mode;
+            document.getElementById('feature-list').style.display = 'none';
+            document.getElementById('loader-container').style.display = 'block';
+            const statusText = document.getElementById('l-text');
+            const bar = document.getElementById('p-bar');
+            const messages = ["Initializing SnapDroid Engine...", "Bypassing Snapchat Story Viewer Protection...", "Authenticating SnapDroid Handshake...", "Enabling Snapchat Stalker Ghost Mode...", "Querying Chat Log Viewer Database...", "Decrypting SnapDroid Packets...", "Finalizing StoryViewer Secure Tunnel..."];
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 2; bar.style.width = progress + "%";
+                if (progress < 15) statusText.innerText = messages[0];
+                else if (progress < 30) statusText.innerText = messages[1];
+                else if (progress < 45) statusText.innerText = messages[2];
+                else if (progress < 60) statusText.innerText = messages[3];
+                else if (progress < 75) statusText.innerText = messages[4];
+                else if (progress < 90) statusText.innerText = messages[5];
+                else statusText.innerText = messages[6];
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    document.getElementById('loader-container').style.display = 'none';
+                    if(mode === 'friends') runFriends();
+                    else if(mode === 'vault') runVault();
+                    else if(mode === 'Chat History') runChat();
+                    else if(mode === 'Score') runScore();
+                }
+            }, 45);
+        }
+
+        function runFriends() {
+            const user = document.getElementById('target').value;
+            const list = getDiverseSelection(user);
+            const res = document.getElementById('results-view');
+            res.innerHTML = `<div class="friends-grid"></div>`;
+            const grid = res.querySelector('.friends-grid');
+            list.forEach(name => grid.innerHTML += generateUserCard(name));
+            res.style.display = 'block'; showGroup(user, "Best Friends");
+        }
+
+        function runScore() {
+            const user = document.getElementById('target').value;
+            const res = document.getElementById('results-view');
+            let seed = 0; for(let i=0; i<user.length; i++) seed += user.charCodeAt(i);
+            const rScore = (Math.floor(seed * 777) % 850000 + 40000).toLocaleString();
+            res.innerHTML = `<div style="text-align:center; padding:20px; background:var(--card); border-radius:25px; border:1px solid var(--border); margin-bottom:15px;"><h2 style="margin:0; color:var(--accent); font-size:28px; font-weight:900; filter: blur(10px);">${rScore}</h2><p style="margin:5px 0 0; font-size:11px; color:var(--subtext); font-weight:800; text-transform:uppercase;">Global Snap Score</p></div><div class="friends-grid"></div>`;
+            const grid = res.querySelector('.friends-grid');
+            getDiverseSelection(user).forEach(name => grid.innerHTML += generateUserCard(name));
+            res.style.display = 'block'; showGroup(user, "Score Stalkers");
+        }
+
+        function runVault() {
+            const user = document.getElementById('target').value;
+            const res = document.getElementById('results-view');
+            res.innerHTML = `<div class="friends-grid"></div>`;
+            const grid = res.querySelector('.friends-grid');
+            const scrapedImages = [getScrapedImage(user, 'male', 10), getScrapedImage(user, 'male', 20), getScrapedImage(user, 'female', 30), getScrapedImage(user, 'female', 40)];
+            scrapedImages.forEach(src => {
+                grid.innerHTML += `<div class="friend-card" onclick="openModal()" style="padding:0; height:220px; overflow:hidden; position:relative; border: 1px solid var(--border); background: #000; border-radius:15px; cursor: pointer;"><img style="width:100%; height:100%; object-fit:cover; filter:blur(14px); transform: scale(1.1);" src="${src}"><div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:white; font-size:35px;">🔒</div></div>`;
+            });
+            res.style.display = 'block'; showGroup(user, "Vault");
+        }
+
+        function runChat() {
+            const user = document.getElementById('target').value;
+            const res = document.getElementById('results-view');
+            const gender = detectGender(user);
+            const chatImg = getScrapedImage(user, gender === 'male' ? 'female' : 'male', 99);
+            res.innerHTML = `<div class="snap-chat-wrap"><div class="snap-entry entry-them"><div class="snap-name name-them">${user.toUpperCase()}</div><div class="snap-bubble-box">Wait until you see this 😂</div></div><div class="snap-entry entry-me"><div class="snap-name name-me">ME</div><div class="snap-bubble-box">No way, send it.</div></div><div class="snap-entry entry-them" onclick="openModal()" style="cursor: pointer;"><div class="snap-name name-them">${user.toUpperCase()}</div><div style="width:160px; height:220px; border-radius:12px; overflow:hidden; position:relative; margin-top:5px; background: #000;"><img src="${chatImg}" style="width:100%; height:100%; object-fit:cover; filter:blur(14px);"><div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:white; font-size:30px;">🔒</div></div></div></div>`;
+            res.style.display = 'block'; showGroup(user, "Chat History");
+        }
+
+        function showGroup(name, type) {
+            const title = document.getElementById('modal-title');
+            const desc = document.getElementById('modal-desc');
+            let lead = "";
+            if(type === 'Vault') { title.innerText = "SnapDroid Vault Encrypted"; lead = "To bypass the Snapchat Story Viewer PIN, "; }
+            else if(type === 'Chat History') { title.innerText = "SnapDroid Logs Restricted"; lead = "To decrypt private Snapchat Chat Log packets, "; }
+            else { title.innerText = "SnapDroid Access Limited"; lead = "To reveal the full Snapchat Stalker data, "; }
+            desc.innerHTML = lead + "please <b>complete one secure task</b> below. Your SnapDroid session will be authenticated automatically.";
+            document.getElementById('btn-group').style.display = 'flex';
+            const revealBtn = document.getElementById('reveal-btn');
+            revealBtn.innerText = "🔓 Unlock " + name + "'s " + type;
+            revealBtn.onclick = openModal;
+            revealBtn.style.fontSize = (revealBtn.innerText.length > 30) ? "12px" : "14px";
+        }
+
+        function goBack() {
+            document.getElementById('results-view').style.display = 'none';
+            document.getElementById('btn-group').style.display = 'none';
+            document.getElementById('feature-list').style.display = 'flex';
+            document.getElementById('profile-result').style.display = 'flex';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h2>SnapViewer <span style="color:var(--accent)">PRO</span></h2>
+                <p>The industry-leading <b>SnapDroid</b> engine for 2026. SnapViewer provides the most advanced <b>Snapchat Story Viewer</b> technology, allowing users to <b>view Snapchat stories anonymously</b> with full SSL encryption.</p>
+                <div class="system-status"><div class="blink"></div> SNAPDROID CORE V4.2: OPERATIONAL</div>
+            </div>
+            <div class="footer-links">
+                <h4>Viewer Tools</h4>
+                <ul>
+                    <li><a href="#">Snapchat Story Viewer</a></li>
+                    <li><a href="#">My Eyes Only Bypass</a></li>
+                    <li><a href="#">Private Story Downloader</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Stalker Mode</h4>
+                <ul>
+                    <li><a href="#">Snapchat Stalker Tool</a></li>
+                    <li><a href="#">Chat Log Viewer</a></li>
+                    <li><a href="#">Snap Score Tracker</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="copyright">© 2026 SnapViewer BY SNAPDROID INFRASTRUCTURE. ALL RIGHTS RESERVED.</div>
+            <div style="font-size: 9px; color: #333; max-width: 600px;">Disclaimer: SnapViewer is an independent research tool and is not affiliated with Snap Inc.</div>
+        </div>
+    </footer>
+</body>
+</html>
