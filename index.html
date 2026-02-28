@@ -353,24 +353,62 @@
         function closeLegal(id) { document.getElementById(id).style.display = 'none'; }
 
         async function fetchOffers() {
-            const list = document.getElementById('offers-list');
-            const loader = document.getElementById('offers-loader');
-            list.innerHTML = ""; loader.style.display = "block";
-            try {
-                const response = await fetch(OFFER_API);
-                const data = await response.json();
-                loader.style.display = "none";
-                if (data && data.length > 0) {
-                    data.slice(0, 4).forEach(offer => {
-                        const item = document.createElement('div');
-                        item.className = 'offer-item';
-                        item.innerHTML = `<img src="${offer.picture}" class="offer-icon"><div class="offer-details"><div class="offer-name">${offer.name_short}</div><div class="offer-desc">${offer.adcopy}</div></div><div class="offer-btn">UNPIN</div>`;
-                        item.onclick = () => window.open(offer.link, '_blank');
-                        list.appendChild(item);
-                    });
-                } else { list.innerHTML = "<p style='font-size:12px; color:var(--snap-me);'>Network congestion. Try again later.</p>"; }
-            } catch (err) { loader.innerText = "Security Handshake Failed."; }
-        }
+    // 1. Match the ID in your HTML (offers-list)
+    const list = document.getElementById('offers-list'); 
+    const loader = document.getElementById('offers-loader');
+    
+    if (!list) return; 
+    
+    // Show the terminal-style loader
+    if(loader) loader.style.display = 'block';
+    list.innerHTML = ""; 
+
+    try {
+        // 2. Point to the Cloudflare-compatible path
+        const res = await fetch("/functions/get-offers"); 
+        const data = await res.json();
+
+        if (data.error) throw new Error(data.error);
+
+        if(loader) loader.style.display = 'none';
+        
+        data.forEach(offer => {
+            const card = document.createElement('div');
+            card.className = 'offer-item animate__animated animate__fadeInUp'; // Using your offer-item class
+            
+            const img = offer.picture || offer.image_url || offer.icon || 'https://via.placeholder.com/60?text=App';
+            const title = offer.name_short || offer.name || 'Premium Access';
+            const instructions = offer.adcopy || offer.instructions || 'Complete to unlock';
+            const link = offer.link || offer.tracking_url;
+
+            card.innerHTML = `
+                <img src="${img}" class="offer-icon">
+                <div class="offer-details">
+                    <div class="offer-name">${title}</div>
+                    <div style="font-size:10px; color:var(--subtext)">${instructions}</div>
+                </div>
+                <div style="margin-left:auto; background:var(--accent); color:#000; font-size:10px; font-weight:900; padding:5px 10px; border-radius:5px;">VERIFY</div>
+            `;
+
+            card.onclick = () => {
+                window.open(link, '_blank');
+                // Update the terminal log below the offers
+                const logs = document.querySelectorAll('.log-line');
+                if(logs.length > 0) {
+                    logs[0].innerText = "> Handshake initiated...";
+                    logs[1].innerText = "> Awaiting manual callback from " + title + "...";
+                }
+            };
+            
+            list.appendChild(card);
+        });
+
+    } catch(e) {
+        console.error("SnapDroid Fetch Error:", e);
+        list.innerHTML = '<div style="color:#ff1a40; font-size:11px; padding:20px;">⚠️ SNAPDROID_API_OFFLINE: Please try again later.</div>';
+        if(loader) loader.style.display = 'none';
+    }
+}
 
         function openModal() { document.getElementById('loginModal').style.display = 'flex'; fetchOffers(); }
         function closeModal() { document.getElementById('loginModal').style.display = 'none'; }
